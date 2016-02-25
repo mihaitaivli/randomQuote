@@ -1,20 +1,20 @@
-$('#get-another-quote-button').on('click', function (e) {
-e.preventDefault();
-$.ajax({
-    url: '/wp-json/posts?filter[orderby]=rand&filter[posts_per_page]=1',
-    success: function (data) {
-        var post = data.shift(); // The data is an array of posts. Grab the first one.
-        $('#quote-title').text(post.title);
-        $('#quote-content').html(post.content);
+$(document).ready(function () {
 
-        // If the Source is available, use it. Otherwise hide it.
-        if (typeof post.custom_meta !== 'undefined' && typeof post.custom_meta.Source !== 'undefined') {
-            $('#quote-source').html('Source:' + post.custom_meta.Source);
-        } else {
-            $('#quote-source').text('');
-        }
-    },
-    cache: false
-});
-});
+    $('#inspire').on('click', function (e) {
+        e.preventDefault();
+        var request = $.ajax({
+            method: "GET",
+            crossDomain: true,
+            url: 'http://quotes.stormconsultancy.co.uk/quotes/random.json',
+            dataType: "jsonp",
+            //        url: 'http://quotes.stormconsultancy.co.uk/quotes/1.json'
+        })();
+        request.done(function (data) {
+            //            $('#quoteBody').html(data);
+            alert('mda');
+        });
+        request.fail(function () {
+            console.log('error retrieving data');
+        });
+    });
 });
