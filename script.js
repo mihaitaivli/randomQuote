@@ -1,11 +1,13 @@
 // Can't use some JSON API provider so
-// i use my own object
+// i use my own object-ish thing
 
 $(document).ready(function () {
+
+    //$('#tweeterButton').attr('href', 'https://twitter.com/intent/tweet=bine ba');
     var quotesJSON = {
         1: {
-            "author": "C.A.R. Hoare",
-            "quote": "There are two ways of constructing a software design. One way is to make it so simple that there are obviously no deficiencies. And the other way is to make it so complicated that there are no obvious deficiencies."
+            "author": "Edward V Berard",
+            "quote": "Walking on water and developing software from a specification are easy if both are frozen."
         },
         2: {
             "author": "Seymour Cray",
@@ -13,11 +15,11 @@ $(document).ready(function () {
         },
         3: {
             "author": "George Carrette",
-            "quote": "First learn computer science and all the theory. Next develop a programming style. Then forget all that and just hack."
+            "quote": "First learn computer science, theory and develop a programming style. Then forget all that and just hack."
         },
         4: {
-            "author": "Brian W. Kernighan",
-            "quote": "Debugging is twice as hard as writing the code in the first place. Therefore, if you write the code as cleverly as possible, you are, by definition, not smart enough to debug it."
+            "author": "Jan L. A. van de Snepscheut",
+            "quote": "In theory, theory and practice are the same. In practice, they’re not."
         },
         5: {
             "author": "Bill Gates",
@@ -36,8 +38,8 @@ $(document).ready(function () {
             "quote": "Talk is cheap. Show me the code."
         },
         9: {
-            "author": "Eric S. Raymond",
-            "quote": "Computer science education cannot make anybody an expert programmer any more than studying brushes and pigment can make somebody an expert painter."
+            "author": "Leon Bambrick",
+            "quote": "There are 2 hard problems in computer science: cache invalidation, naming things, and off-by-1 errors."
         }
     };
 
@@ -49,18 +51,34 @@ $(document).ready(function () {
         return quotesJSON[id];
     };
 
+    //implementation of quote button
     $('#inspire').on('click', function (e) {
         e.preventDefault();
+
+        //extract random quote
+        var workingQuote = extractRandomQuote();
+        var quoteBody = workingQuote["quote"];
+        var quoteAuthor = workingQuote["author"];
+
+        //text for tweet href
+        //should limit to 140 chars but... tweeter removed the limitation AFAIK
+        var staticPart = "https://twitter.com/intent/tweet?hashtags=quotes&text=";
+        var textToTweet = staticPart + quoteBody + " -by " + quoteAuthor;
+
         //use animate opacity for smooth transition
         $('#quoteHolder').animate({
             'opacity': 0
         }, 700, function () {
-            var workingQuote = extractRandomQuote();
-            $('#quoteBody').text(workingQuote["quote"]);
-            $('#quoteAuthor').text(workingQuote["author"]);
+            //            var workingQuote = extractRandomQuote();
+            $('#quoteBody').text(quoteBody);
+            $('#quoteAuthor').text(quoteAuthor);
         }).animate({
             'opacity': 1
         }, 700);
 
+        // Actualization of tweeter button
+        $('#tweeterButton').attr('href', textToTweet);
     });
+
+
 });
